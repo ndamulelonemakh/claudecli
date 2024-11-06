@@ -64,6 +64,17 @@ The CLI looks for the following environment variables:
    ```bash
    tox
    ```
+5. Publish a new release
+
+   ```bash
+   # Update version in __version__.py
+   
+   # Commit and changes
+   git add .
+   git commit -m "feat: new feature description"
+   git tag -a v0.1.0 -m "Release v0.1.0"
+   git push origin main --tags
+   ````
 
 ## Project structure
 
