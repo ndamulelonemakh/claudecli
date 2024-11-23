@@ -72,9 +72,9 @@ class ClaudeCLI:
 
         message = self.client.messages.create(
             model="claude-3-haiku-20240307", 
-            max_tokens=1, 
+            max_tokens=10, 
             temperature=0, 
             messages=[{"role": "user", "content": prompt}]
         )
 
-        return message.content[0].text.strip()
+        return message.content[0].text.strip() if len(message.content) > 0 else message.content.text

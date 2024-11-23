@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import traceback
 import click
 from typing import Optional
 from claude_cli.logger import setup_logging
@@ -8,7 +9,7 @@ from claude_cli.core import ClaudeCLI, ShellConfig
 
 @click.command()
 @click.argument("command_description")
-@click.option("--no-confirm", is_flag=True, help="Execute without confirmation")
+@click.option("--no-confirm", "-nc", is_flag=True, default=False, help="Execute without confirmation")
 @click.option("--api-key", help="Anthropic API key (or set ANTHROPIC_API_KEY env var)")
 @click.option("--shell", help="Specify shell to use (bash/zsh/fish)")
 @click.option("--debug", is_flag=True, help="Show debug information")
@@ -32,13 +33,12 @@ def main(command_description: str, no_confirm: bool, api_key: str, shell: Option
             shell_command = cli.get_command(command_description)
             bar.update(1)
 
-        logger.info(f"Generated command:\n  {shell_command}")
+        logger.debug("Generated command:\n")
+        logger.info(shell_command)
 
         if not no_confirm:
-            with click.progressbar(length=1, label="Analyzing safety") as bar:
-                safety_level = cli.should_proceed(shell_command)
-                bar.update(1)
-
+            logger.debug("Checking safety level...")
+            safety_level = cli.should_proceed(shell_command)
             if safety_level == "STOP":
                 logger.critical("This command requires careful review!")
                 logger.error("It might be destructive or have unintended consequences.")
@@ -53,11 +53,11 @@ def main(command_description: str, no_confirm: bool, api_key: str, shell: Option
                     return
 
             else:  # PROCEED
-                logger.info("Command looks safe!")
+                logger.debug("Command looks safe!")
                 if debug:
                     logger.debug(f"Safety level: {safety_level}")
 
-        logger.info("Executing command...")
+        logger.debug("Executing command...")
 
         # Use the detected/specified shell
         process = subprocess.run([shell_config.path, "-c", shell_command], text=True, capture_output=True)
@@ -68,7 +68,7 @@ def main(command_description: str, no_confirm: bool, api_key: str, shell: Option
             click.echo(process.stderr, err=True)
 
         if process.returncode == 0:
-            logger.info("Command completed successfully!")
+            logger.debug("Command completed successfully!")
         else:
             logger.error(f"Command failed with error code: {process.returncode}")
 
@@ -76,6 +76,7 @@ def main(command_description: str, no_confirm: bool, api_key: str, shell: Option
 
     except Exception as e:
         logger.exception(f"Error:\n{str(e)}")
+        logger.error(traceback.format_exc())
         sys.exit(1)
 
 
