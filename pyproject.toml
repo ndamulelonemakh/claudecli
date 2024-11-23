@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "claude-cli"
-version = "0.1.0rc2"
+name = "claudecli"
+version = "0.1.0rc3"
 description = "Natural language interface for command line using Claude AI"
 readme = "README.md"
-packages = [{ include = "claude_cli", from = "." }]
+packages = [{ include = "claudecli", from = "." }]
 keywords = ["cli", "claude", "ai", "shell", "automation"]
 authors = ["Ndamulelo Nemakhavhani <info@rihonegroup.com>"]
 classifiers = [
@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Security",
 ]
-homepage = "https://github.com/ndamulelonemakh/claude-cli"
+homepage = "https://github.com/ndamulelonemakh/claudecli"
 repository = "https://github.com/ndamulelonemakh/claude-cli#README"
 license = "MIT"
 
@@ -25,8 +25,8 @@ anthropic = "^0.39.0"
 click = "^8.1.7"
 
 [tool.poetry.scripts]
-claude = "claude_cli.cli:main"
-claude_cli = "claude_cli.cli:main"
+claude = "claudecli.cli:main"
+claude_cli = "claudecli.cli:main"
 
 [build-system]
 requires = ["poetry-core"]

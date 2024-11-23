@@ -5,7 +5,7 @@ Natural language interface for command line using Claude AI
 ## Installation
 
 ```bash
-pip install claude-cli
+pip install claudecli
 ```
 
 ## Usage

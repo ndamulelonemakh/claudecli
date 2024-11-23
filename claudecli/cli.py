@@ -3,8 +3,8 @@ import subprocess
 import traceback
 import click
 from typing import Optional
-from claude_cli.logger import setup_logging
-from claude_cli.core import ClaudeCLI, ShellConfig
+from claudecli.logger import setup_logging
+from claudecli.core import ClaudeCLI, ShellConfig
 
 
 @click.command()
