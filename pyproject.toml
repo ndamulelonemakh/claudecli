@@ -3,10 +3,9 @@ name = "claude-cli"
 version = "0.1.0rc1"
 description = "Natural language interface for command line using Claude AI"
 readme = "README.md"
-license = "MIT"
 packages = [{ include = "claude_cli", from = "./src" }]
 keywords = ["cli", "claude", "ai", "shell", "automation"]
-authors = ["Ndamulelo Nemakhavhani <ndamulelo@rihonegroup.com>"]
+authors = ["Ndamulelo Nemakhavhani <info@rihonegroup.com>"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -19,6 +18,7 @@ classifiers = [
 ]
 homepage = "https://github.com/ndamulelonemakh/claude-cli"
 repository = "https://github.com/ndamulelonemakh/claude-cli#README"
+license = "MIT"
 
 [tool.poetry.scripts]
 claude = "claude_cli.cli:main"
