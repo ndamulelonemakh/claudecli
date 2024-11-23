@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "claude-cli"
-version = "0.1.0rc1"
+version = "0.1.0rc2"
 description = "Natural language interface for command line using Claude AI"
 readme = "README.md"
 packages = [{ include = "claude_cli", from = "." }]

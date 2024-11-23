@@ -27,11 +27,6 @@ class ColoredLogger(logging.Logger):
 
     def _log(self, level: int, msg: str, *args, **kwargs):
         if self.isEnabledFor(level):
-            # Format message with args if any
-            # if args:
-            #     msg = msg % args
-
-            # Add icon and apply color
             icon = self.ICONS.get(level, "")
             color_kwargs = self.COLORS.get(level, {})
             click.secho(f"{icon} {msg}", **color_kwargs)
@@ -39,10 +34,7 @@ class ColoredLogger(logging.Logger):
 
 def setup_logging(debug: bool = False):
     """Configure the custom logger"""
-    # Register our custom logger class
     logging.setLoggerClass(ColoredLogger)
-
-    # Get logger instance
     logger = logging.getLogger("claude-cli")
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
