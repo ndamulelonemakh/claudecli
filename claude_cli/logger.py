@@ -28,16 +28,13 @@ class ColoredLogger(logging.Logger):
     def _log(self, level: int, msg: str, *args, **kwargs):
         if self.isEnabledFor(level):
             # Format message with args if any
-            if args:
-                msg = msg % args
+            # if args:
+            #     msg = msg % args
 
             # Add icon and apply color
             icon = self.ICONS.get(level, "")
             color_kwargs = self.COLORS.get(level, {})
-            colored_msg = click.style(f"{icon} {msg}", **color_kwargs)
-
-            # Print to console
-            click.echo(colored_msg)
+            click.secho(f"{icon} {msg}", **color_kwargs)
 
 
 def setup_logging(debug: bool = False):

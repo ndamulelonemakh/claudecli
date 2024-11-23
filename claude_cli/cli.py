@@ -75,9 +75,7 @@ def main(command_description: str, no_confirm: bool, api_key: str, shell: Option
         sys.exit(process.returncode)
 
     except Exception as e:
-        logger.critical(f"Error: {str(e)}")
-        if debug:
-            logger.debug("Debug traceback:", exc_info=True)
+        logger.exception(f"Error:\n{str(e)}")
         sys.exit(1)
 
 

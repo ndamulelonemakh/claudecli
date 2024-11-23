@@ -3,7 +3,7 @@ name = "claude-cli"
 version = "0.1.0rc1"
 description = "Natural language interface for command line using Claude AI"
 readme = "README.md"
-packages = [{ include = "claude_cli", from = "claude_cli" }]
+packages = [{ include = "claude_cli", from = "." }]
 keywords = ["cli", "claude", "ai", "shell", "automation"]
 authors = ["Ndamulelo Nemakhavhani <info@rihonegroup.com>"]
 classifiers = [

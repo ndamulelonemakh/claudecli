@@ -31,6 +31,10 @@ class ShellConfig:
 
 class ClaudeCLI:
     def __init__(self, api_key: Optional[str] = None, shell: Optional[ShellConfig] = None):
+        if api_key is None and "ANTHROPIC_API_KEY" not in os.environ:
+            raise ValueError(
+                "ANTHROPIC_API_KEY is required to use ClaudeCLI. Please obtain an API key from: https://console.anthropic.com/settings/keys"
+            )
         self.client = Anthropic(api_key=api_key)
         self.shell = shell or ShellConfig.detect_current_shell()
         self.logger = logging.getLogger("claude-cli")
@@ -53,7 +57,7 @@ class ClaudeCLI:
             messages=[{"role": "user", "content": prompt}],
         )
 
-        return message.content.strip()
+        return message.content[0].text.strip()
 
     def should_proceed(self, command: str) -> str:
         """Check command safety using Claude Haiku"""
@@ -67,7 +71,10 @@ class ClaudeCLI:
         One word response:"""
 
         message = self.client.messages.create(
-            model="claude-3-haiku-20240307", max_tokens=1, temperature=0, messages=[{"role": "user", "content": prompt}]
+            model="claude-3-haiku-20240307", 
+            max_tokens=1, 
+            temperature=0, 
+            messages=[{"role": "user", "content": prompt}]
         )
 
-        return message.content.strip()
+        return message.content[0].text.strip()
