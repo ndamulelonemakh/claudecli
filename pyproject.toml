@@ -20,6 +20,11 @@ homepage = "https://github.com/ndamulelonemakh/claude-cli"
 repository = "https://github.com/ndamulelonemakh/claude-cli#README"
 license = "MIT"
 
+[tool.poetry.dependencies]
+python = ">=3.10, <4.0"
+anthropic = "^0.39.0"
+click = "^8.1.7"
+
 [tool.poetry.scripts]
 claude = "claude_cli.cli:main"
 claude_cli = "claude_cli.cli:main"

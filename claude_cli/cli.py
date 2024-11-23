@@ -1,0 +1,85 @@
+import sys
+import subprocess
+import click
+from typing import Optional
+from claude_cli.logger import setup_logging
+from claude_cli.core import ClaudeCLI, ShellConfig
+
+
+@click.command()
+@click.argument("command_description")
+@click.option("--no-confirm", is_flag=True, help="Execute without confirmation")
+@click.option("--api-key", help="Anthropic API key (or set ANTHROPIC_API_KEY env var)")
+@click.option("--shell", help="Specify shell to use (bash/zsh/fish)")
+@click.option("--debug", is_flag=True, help="Show debug information")
+def main(command_description: str, no_confirm: bool, api_key: str, shell: Optional[str], debug: bool):
+    """Natural language interface for command line using Claude"""
+
+    logger = setup_logging(debug)
+
+    try:
+        # Configure shell
+        if shell:
+            shell_config = ShellConfig(shell, f"/bin/{shell}", f".{shell}rc")
+            logger.debug(f"Using specified shell: {shell}")
+        else:
+            shell_config = ShellConfig.detect_current_shell()
+            logger.debug(f"Detected shell: {shell_config.name} ({shell_config.path})")
+
+        cli = ClaudeCLI(api_key=api_key, shell=shell_config)
+
+        with click.progressbar(length=1, label="Generating command") as bar:
+            shell_command = cli.get_command(command_description)
+            bar.update(1)
+
+        logger.info(f"Generated command:\n  {shell_command}")
+
+        if not no_confirm:
+            with click.progressbar(length=1, label="Analyzing safety") as bar:
+                safety_level = cli.should_proceed(shell_command)
+                bar.update(1)
+
+            if safety_level == "STOP":
+                logger.critical("This command requires careful review!")
+                logger.error("It might be destructive or have unintended consequences.")
+                if not click.confirm("Are you absolutely sure you want to proceed?", default=False):
+                    logger.warning("Aborted.")
+                    return
+
+            elif safety_level == "CONFIRM":
+                logger.warning("This command should be reviewed")
+                if not click.confirm("Would you like to proceed?", default=True):
+                    logger.warning("Aborted.")
+                    return
+
+            else:  # PROCEED
+                logger.info("Command looks safe!")
+                if debug:
+                    logger.debug(f"Safety level: {safety_level}")
+
+        logger.info("Executing command...")
+
+        # Use the detected/specified shell
+        process = subprocess.run([shell_config.path, "-c", shell_command], text=True, capture_output=True)
+
+        if process.stdout:
+            click.echo(process.stdout)
+        if process.stderr:
+            click.echo(process.stderr, err=True)
+
+        if process.returncode == 0:
+            logger.info("Command completed successfully!")
+        else:
+            logger.error(f"Command failed with error code: {process.returncode}")
+
+        sys.exit(process.returncode)
+
+    except Exception as e:
+        logger.critical(f"Error: {str(e)}")
+        if debug:
+            logger.debug("Debug traceback:", exc_info=True)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
