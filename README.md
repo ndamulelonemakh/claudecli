@@ -29,9 +29,6 @@ claude --debug "compress logs"
 - Natural language command generation using Claude AI
 - Automatic shell detection (bash/zsh/fish)
 - Smart safety checks
-- Colorful logging
-- Progress indicators
-- Debug mode
 
 ## Configuration
 
@@ -40,41 +37,6 @@ The CLI looks for the following environment variables:
 - `ANTHROPIC_API_KEY`: Your Anthropic API key
 - `CLAUDE_CLI_DEBUG`: Enable debug mode
 - `CLAUDE_CLI_SHELL`: Override shell detection
-
-## Development
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/claude-cli.git
-   cd claude-cli
-   ```
-
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # or `venv\Scripts\activate` on Windows
-   ```
-
-3. Install development dependencies:
-   ```bash
-   pip install -e ".[dev]"
-   ```
-
-4. Run tests:
-   ```bash
-   tox
-   ```
-5. Publish a new release
-
-   ```bash
-   # Update version in __version__.py
-   
-   # Commit and changes
-   git add .
-   git commit -m "feat: new feature description"
-   git tag -a v0.1.0 -m "Release v0.1.0"
-   git push origin main --tags
-   ````
 
 ## Project structure
 
@@ -108,8 +70,8 @@ claude-cli/
 
 ## Contributing
 
-Pull requests are welcome!
+Pull requests are definitely welcome!
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
